@@ -1,4 +1,4 @@
-module cso-api/auth
+module cso/auth
 
 go 1.14
 

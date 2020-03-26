@@ -7,7 +7,7 @@ import (
 
 	"github.com/micro/go-micro"
 
-	auth "cso-api/auth/proto"
+	auth "cso/auth/proto"
 )
 
 type Auth struct {
