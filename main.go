@@ -13,7 +13,8 @@ import (
 type Auth struct {
 }
 
-func (a *Auth) Message(ctx context.Context, req *auth.Empty, rsp *auth.Response) error {
+func (a *Auth) Message(ctx context.Context, req *auth.Empty, resp *auth.Response) error {
+	resp.Message = "Hello, Auth"
 	return nil
 }
 
