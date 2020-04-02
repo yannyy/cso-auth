@@ -20,7 +20,7 @@ func (a *Auth) Message(ctx context.Context, req *auth.Empty, resp *auth.Response
 
 func main() {
 	service := micro.NewService(
-		micro.Name("cso.auth"),
+		micro.Name("auth"),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*10),
 	)
