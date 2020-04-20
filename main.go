@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
-	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/v2"
 
 	auth "cso/auth/proto"
 )
@@ -13,7 +14,22 @@ import (
 type Auth struct {
 }
 
+type AccessScope int
+
+const (
+	AccessScopePC AccessScope = iota
+	AccessScopeApp
+	AccessScopeWechat
+)
+
+func apiLog(method, name string, ts int64) {
+	fmt.Printf("%s: %s-%d\n", name, method, ts)
+}
+
 func (a *Auth) Message(ctx context.Context, req *auth.Empty, resp *auth.Response) error {
+	ts := time.Now().Unix()
+	apiLog("start", "Message", ts)
+	defer apiLog("end", "Message", ts)
 	resp.Message = "Hello, Auth"
 	return nil
 }
