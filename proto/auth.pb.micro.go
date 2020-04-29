@@ -5,14 +5,12 @@ package cso_auth
 
 import (
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
+	math "math"
 )
 
 import (
 	context "context"
-
 	client "github.com/micro/go-micro/v2/client"
 	server "github.com/micro/go-micro/v2/server"
 )
@@ -37,6 +35,7 @@ var _ server.Option
 
 type AuthService interface {
 	Message(ctx context.Context, in *Empty, opts ...client.CallOption) (*Response, error)
+	Token(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*TokenResponse, error)
 }
 
 type authService struct {
@@ -61,15 +60,27 @@ func (c *authService) Message(ctx context.Context, in *Empty, opts ...client.Cal
 	return out, nil
 }
 
+func (c *authService) Token(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*TokenResponse, error) {
+	req := c.c.NewRequest(c.name, "Auth.Token", in)
+	out := new(TokenResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Auth service
 
 type AuthHandler interface {
 	Message(context.Context, *Empty, *Response) error
+	Token(context.Context, *TokenRequest, *TokenResponse) error
 }
 
 func RegisterAuthHandler(s server.Server, hdlr AuthHandler, opts ...server.HandlerOption) error {
 	type auth interface {
 		Message(ctx context.Context, in *Empty, out *Response) error
+		Token(ctx context.Context, in *TokenRequest, out *TokenResponse) error
 	}
 	type Auth struct {
 		auth
@@ -84,4 +95,8 @@ type authHandler struct {
 
 func (h *authHandler) Message(ctx context.Context, in *Empty, out *Response) error {
 	return h.AuthHandler.Message(ctx, in, out)
+}
+
+func (h *authHandler) Token(ctx context.Context, in *TokenRequest, out *TokenResponse) error {
+	return h.AuthHandler.Token(ctx, in, out)
 }

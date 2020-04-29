@@ -4,10 +4,19 @@ package cso.auth;
 
 service Auth {
     rpc Message(Empty) returns(Response){}
+    rpc Token(TokenRequest) returns(TokenResponse) {}
 }
 
 message Empty {}
 
 message Response {
     string message = 1;
+}
+
+message TokenRequest{
+    string username = 1;
+}
+
+message TokenResponse{
+    string token = 1;
 }

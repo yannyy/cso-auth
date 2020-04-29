@@ -34,6 +34,13 @@ func (a *Auth) Message(ctx context.Context, req *auth.Empty, resp *auth.Response
 	return nil
 }
 
+func (a *Auth) Token(ctx context.Context, req *auth.TokenRequest, resp *auth.TokenResponse) error {
+	username := req.Username
+	token := fmt.Sprintf("token-%s", username)
+	resp.Token = token
+	return nil
+}
+
 func main() {
 	service := micro.NewService(
 		micro.Name("auth"),
